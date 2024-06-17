@@ -6,7 +6,6 @@ import pickle as pkl
 
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import make_regression
-from sklearn.preprocessing import MinMaxScaler
 
 class LinearRegressor:
     """
@@ -21,12 +20,12 @@ class LinearRegressor:
     - __init__(self, input_dim): Initializes the Linear Regressor with random weights and bias
     - forward(self, X): Calculates the predicted value for the given input
     - backward(self, X, y, y_hat, lr): Calculates the gradient and updates the weights and bias
-    - train(self, X_train, y_train, X_test, y_test, epochs=25, lr=0.0001): Trains the neural network
+    - train(self, X_train, y_train, X_test, y_test, epochs=25, lr=0.0001): Trains the Linear Regressor
     """
 
-    def __init__(self, no_of_features):
+    def __init__(self, no_of_features: int):
         """
-        Initializes the neural network with random weights and bias.
+        Initializes the Linear Regressor with random weights and bias.
 
         Parameters:
         - input_dim: int, the dimension of the input data
@@ -38,16 +37,16 @@ class LinearRegressor:
     def __repr__(self):
         return f"NN(input_dim={self.w.shape[0]})"
     
-    def parameters(self):
+    def parameters(self) -> dict:
         """
-        Returns the weights and bias of the neural network.
+        Returns the weights and bias of the Linear Regressor.
 
         Returns:
         - tuple, the weights and bias
         """
         return {"weights": self.w, "bias": self.b}
 
-    def forward(self, X):
+    def forward(self, X: np.ndarray) -> np.ndarray:
         """
         Calculates the predicted value for the given input.
 
@@ -60,7 +59,7 @@ class LinearRegressor:
         
         return np.dot(X, self.w) + self.b
 
-    def backward(self, X, y, y_hat, lr):
+    def backward(self, X: np.ndarray, y: np.ndarray, y_hat: np.ndarray, lr: float) -> None:
         """
         Calculates the gradient and updates the weights and bias.
 
@@ -79,9 +78,9 @@ class LinearRegressor:
         self.w -= lr * w_grad
         self.b -= lr * b_grad
 
-    def train(self, X_train, y_train, X_test, y_test, epochs=25, lr=0.0001, log=True):
+    def train(self, X_train: np.ndarray, y_train: np.ndarray, X_test: np.ndarray, y_test: np.ndarray, epochs: int = 25, lr: float = 0.0001, log: bool = True):
         """
-        Trains the neural network.
+        Trains the Regressor.
 
         Parameters:
         - X_train: numpy array, the training input data
@@ -115,7 +114,7 @@ class LinearRegressor:
 
         return history
     
-    def predict(self, X):
+    def predict(self, X: np.ndarray) -> np.ndarray:
         """
         Predicts the target values for the given input data.
 
@@ -130,8 +129,65 @@ class LinearRegressor:
             return self.forward(X)
         except Exception as e:
             print(f"An error occurred: {e}")
+            
+    def save_model(self, path: str):
+        """
+        Saves the model to a file.
+
+        Parameters:
+        - path: str, the path to save the model
+        
+        Returns:
+        - None
+        """
+        with open(path, 'wb') as file:
+            pkl.dump(self, file)
+            
+    def load_model(self, path: str):
+        """
+        Loads the model from a file.
+
+        Parameters:
+        - path: str, the path to load the model from
+        """
+        
+        with open(path, 'rb') as file:
+            model = pkl.load(file)
+
+        return model
     
-    def plot_loss(self, history):
+    def save_weights(self, path: str):
+        """
+        Saves the weights and bias of the model to a file.
+
+        Parameters:
+        - path: str, the path to save the weights and bias
+        
+        Returns:
+        - None
+        """
+        
+        with open(path, 'wb') as file:
+            pkl.dump(self.parameters(), file)
+            
+    def load_weights(self, path: str):
+        """
+        Loads the weights and bias of the model from a file.
+
+        Parameters:
+        - path: str, the path to load the weights and bias from
+        
+        Returns:
+        - None
+        """
+        
+        with open(path, 'rb') as file:
+            weights = pkl.load(file)
+            
+        self.w = weights['weights']
+        self.b = weights['bias']
+    
+    def plot_loss(self, history: dict):
         """
         Plots the training and validation loss history.
 
@@ -142,7 +198,7 @@ class LinearRegressor:
         - None
         """
         
-        plt.figure(figsize=(16, 4))
+        plt.figure(figsize=(12, 4))
 
         plt.subplot(1, 2, 1)
         plt.plot(history['loss'], label='train_loss', color='blue')
@@ -160,13 +216,10 @@ class LinearRegressor:
         plt.show()
 
 if __name__ == "__main__":
-    
-    X, y = make_regression(n_samples=5000, n_features=200, n_informative=100, noise=0.3)
-    
-    scaler = MinMaxScaler()
-    scaler.fit(y)
-    
+    X, y = make_regression(n_samples=2500, n_features=200, n_informative=50, noise=0.3)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
     
     model = LinearRegressor(X.shape[1])
-    history = model.train(X_train, y_train, X_test, y_test, epochs=10, lr=0.0001, log=True)
+    history = model.train(X_train, y_train, X_test, y_test, epochs=100, lr=0.0001, log=True)
+    
+    model.plot_loss(history)
