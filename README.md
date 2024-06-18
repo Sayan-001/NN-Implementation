@@ -20,14 +20,14 @@ Using data from:
 from sklearn.datasets import make_regression
 ```
 The Linear Regressor fitted as:
-![Plot 1](http://example.com/image.jpg)
+![Plot 1](images/Linear_Regression_Performance.png)
 
 Using data from:
 ```python
 from sklearn.datasets import make_classification
 ```
 The Logistic Regressor fitted as:
-![Plot 2](http://example.com/image.jpg)
+![Plot 2](images/Logistic_Regressor_Performance.png)
 
 
 
