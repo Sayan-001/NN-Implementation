@@ -1,6 +1,6 @@
 # NN-Implementation
 
-This repository conntains from-scratch implementations of many Machine Learning Models.
+This repository conntains from-scratch implementations of Machine Learning Models.
 
 Currently, The models implemented are:
 - Linear Regression
