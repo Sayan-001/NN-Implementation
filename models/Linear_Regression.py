@@ -1,26 +1,26 @@
-import sys
-
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle as pkl
 
-from sklearn.model_selection import train_test_split
-from sklearn.datasets import make_regression
-
 class LinearRegressor:
     """
     A simple Linear Regressor class for regression tasks. The Linear Regressor has a single layer with linear activation.
-    It has the same properties as that of a polynomial regression model.
 
     Attributes:
     - w: numpy array, the weights of the Linear Regressor
     - b: float, the bias of the Linear Regressor
 
     Methods:
-    - __init__(self, input_dim): Initializes the Linear Regressor with random weights and bias
-    - forward(self, X): Calculates the predicted value for the given input
-    - backward(self, X, y, y_hat, lr): Calculates the gradient and updates the weights and bias
-    - train(self, X_train, y_train, X_test, y_test, epochs=25, lr=0.0001): Trains the Linear Regressor
+    - __init__ (input_dim) : Initializes the Linear Regressor with random weights and bias
+    - forward (X) : Calculates the predicted value for the given input
+    - backward (X, y, y_hat, lr) : Calculates the gradient and updates the weights and bias
+    - train (X_train, y_train, X_test, y_test, epochs=25, lr=0.0001) : Trains the Linear Regressor
+    - predict (X) : Predicts the target values for the given input data
+    - save_model (path) : Saves the model to a file
+    - load_model (path) : Loads the model from a file
+    - save_weights (path) : Saves the weights and bias of the model to a file
+    - load_weights (path) : Loads the weights and bias of the model from a file
+    - plot_loss (history) : Plots the training and validation loss history
     """
 
     def __init__(self, no_of_features: int):
@@ -31,8 +31,8 @@ class LinearRegressor:
         - input_dim: int, the dimension of the input data
         """
         
-        self.w = np.random.random((no_of_features))
-        self.b = np.random.random()
+        self.w = np.random.randn((no_of_features)) * 0.01
+        self.b = 0.0
         
     def __repr__(self):
         return f"NN(input_dim={self.w.shape[0]})"
@@ -42,8 +42,9 @@ class LinearRegressor:
         Returns the weights and bias of the Linear Regressor.
 
         Returns:
-        - tuple, the weights and bias
+        - dictionary, the weights and bias
         """
+        
         return {"weights": self.w, "bias": self.b}
 
     def forward(self, X: np.ndarray) -> np.ndarray:
@@ -78,7 +79,7 @@ class LinearRegressor:
         self.w -= lr * w_grad
         self.b -= lr * b_grad
 
-    def train(self, X_train: np.ndarray, y_train: np.ndarray, X_test: np.ndarray, y_test: np.ndarray, epochs: int = 25, lr: float = 0.0001, log: bool = True):
+    def train(self, X_train: np.ndarray, y_train: np.ndarray, X_test: np.ndarray, y_test: np.ndarray, epochs: int = 25, lr: float = 0.0001, log: bool = True) -> dict:
         """
         Trains the Regressor.
 
@@ -130,7 +131,7 @@ class LinearRegressor:
         except Exception as e:
             print(f"An error occurred: {e}")
             
-    def save_model(self, path: str):
+    def save_model(self, path: str) -> None:
         """
         Saves the model to a file.
 
@@ -140,6 +141,7 @@ class LinearRegressor:
         Returns:
         - None
         """
+        
         with open(path, 'wb') as file:
             pkl.dump(self, file)
             
@@ -156,7 +158,7 @@ class LinearRegressor:
 
         return model
     
-    def save_weights(self, path: str):
+    def save_weights(self, path: str) -> None:
         """
         Saves the weights and bias of the model to a file.
 
@@ -170,7 +172,7 @@ class LinearRegressor:
         with open(path, 'wb') as file:
             pkl.dump(self.parameters(), file)
             
-    def load_weights(self, path: str):
+    def load_weights(self, path: str) -> None:
         """
         Loads the weights and bias of the model from a file.
 
@@ -187,7 +189,7 @@ class LinearRegressor:
         self.w = weights['weights']
         self.b = weights['bias']
     
-    def plot_loss(self, history: dict):
+    def plot(self, history: dict) -> None:
         """
         Plots the training and validation loss history.
 
@@ -198,7 +200,7 @@ class LinearRegressor:
         - None
         """
         
-        plt.figure(figsize=(12, 4))
+        plt.figure(figsize=(10, 4))
 
         plt.subplot(1, 2, 1)
         plt.plot(history['loss'], label='train_loss', color='blue')
@@ -213,13 +215,17 @@ class LinearRegressor:
         plt.ylabel('Loss')
         plt.title('Validation')
         plt.grid(True)
+        
+        plt.tight_layout()
         plt.show()
 
 if __name__ == "__main__":
-    X, y = make_regression(n_samples=2500, n_features=200, n_informative=50, noise=0.3)
+    from sklearn.datasets import make_regression
+    from sklearn.model_selection import train_test_split
+    
+    X, y = make_regression(n_samples=5000, n_features=500, n_informative=100, noise=0.3)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
     
     model = LinearRegressor(X.shape[1])
-    history = model.train(X_train, y_train, X_test, y_test, epochs=100, lr=0.0001, log=True)
-    
-    model.plot_loss(history)
+    history = model.train(X_train, y_train, X_test, y_test, epochs=50, lr=0.0001, log=True)
+    model.plot(history)
