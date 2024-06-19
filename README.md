@@ -5,6 +5,7 @@ This repository conntains from-scratch implementations of Machine Learning Model
 Currently, The models implemented are:
 - Linear Regression
 - Logistic Regression
+- Single Hidden Layer Neural Network
 
 ## Access
 The models can be accessed as:
@@ -12,6 +13,7 @@ The models can be accessed as:
 ```python
 from models.Linear_Regression import LinearRegressor
 from models.Logistic_Regression import LogisticRegressor
+from models.Neural_Network import Single_Layer_NN
 ```
 
 ## Training on Synthetic Data
