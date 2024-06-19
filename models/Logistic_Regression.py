@@ -13,8 +13,8 @@ class LogisticRegressor:
     
     Methods:
     - __init__ (no_of_features) : Initializes the Logistic Regressor with random weights and bias
-    - forward (X) : Calculates the predicted value for the given input
-    - backward (X, y, y_hat, lr) : Calculates the gradient and updates the weights and bias
+    - _forward (X) : Calculates the predicted value for the given input
+    - _backward (X, y, y_hat, lr) : Calculates the gradient and updates the weights and bias
     - train (X_train, y_train, X_test, y_test, epochs=25, lr=0.0001) : Trains the Logistic Regressor
     - predict (X) : Predicts the target values for the given input data
     - parameters () : Returns the weights and bias of the Logistic Regressor
@@ -37,7 +37,7 @@ class LogisticRegressor:
     def __repr__(self):
         return f"LogisticRegressor(no_of_features={self.features})"
     
-    def forward(self, X):
+    def _forward(self, X):
         """
         Calculates the predicted value for the given input.
 
@@ -50,7 +50,7 @@ class LogisticRegressor:
         z = np.dot(X, self.w) + self.b
         return 1 / (1 + np.exp(-z))
     
-    def backward(self, X, y, y_hat, lr) -> None:
+    def _backward(self, X, y, y_hat, lr) -> None:
         """
         Calculates the gradient and updates the weights and bias.
 
@@ -92,10 +92,10 @@ class LogisticRegressor:
         history = {'loss': [], 'val_loss': [], 'accuracy': [], 'val_accuracy': []}
         
         for epoch in range(1, epochs+1):
-            y_hat = self.forward(X_train)
-            self.backward(X_train, y_train, y_hat, lr)
-            train_pred = self.forward(X_train)
-            val_pred = self.forward(X_test)
+            y_hat = self._forward(X_train)
+            self._backward(X_train, y_train, y_hat, lr)
+            train_pred = self._forward(X_train)
+            val_pred = self._forward(X_test)
             
             loss = -np.mean(y_train * np.log(train_pred) + (1 - y_train) * np.log(1 - train_pred))
             val_loss = -np.mean(y_test * np.log(val_pred) + (1 - y_test) * np.log(1 - val_pred))
@@ -122,7 +122,7 @@ class LogisticRegressor:
         Returns:
         - numpy array, the predicted values
         """
-        return self.forward(X)
+        return self._forward(X)
     
     def parameters(self) -> dict:
         """
