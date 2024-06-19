@@ -28,8 +28,15 @@ Using data from:
 ```python
 from sklearn.datasets import make_classification
 ```
+
 The Logistic Regressor fitted as:
 ![Plot 2](images/Logistic_Regressor_Performance.png)
+
+---
+
+The Single Layer Neural Network fitted as:
+![Plot 3](images/Single_Layer_NN_Performance.png)
+
 
 
 
