@@ -1,20 +1,11 @@
 # NN-Implementation
 
-This repository conntains from-scratch implementations of Machine Learning Models.
+These are some from-scratch implementations of Machine Learning Models done while practicing.
 
 Currently, The models implemented are:
 - Linear Regression
 - Logistic Regression
 - Single Hidden Layer Neural Network
-
-## Access
-The models can be accessed as:
-
-```python
-from models.Linear_Regression import LinearRegressor
-from models.Logistic_Regression import LogisticRegressor
-from models.Neural_Network import Single_Layer_NN
-```
 
 ## Training on Synthetic Data
 Using data from:
