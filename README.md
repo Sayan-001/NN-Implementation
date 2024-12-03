@@ -1,8 +1,8 @@
 # NN-Implementation
 
-These are some from-scratch implementations of Machine Learning Models done while practicing.
+These are some from-scratch implementations of Machine Learning Models. Libraries used- Numpy, Matplotlib.
 
-Currently, The models implemented are:
+The models implemented are:
 - Linear Regression
 - Logistic Regression
 - Single Hidden Layer Neural Network
